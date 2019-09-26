@@ -7,6 +7,8 @@ Segurança de Dados 2018/Q1
 
 Frederico Teixeira, Lenin Cristi, Lucas Zanoni, Otavio Sanchez, Helton Abrantes,Vanessa Marques
 
+***O aplicativo appclinic na pasta /demo foi usado como base para implementar os controles de segurança descritos aqui, ele pode ser encontrado em https://github.com/microsoft/sql-server-samples/tree/master/samples/features/security/contoso-clinic***
+
 ## Resumo do artigo
 
 O presente artigo trata dos controles de segurança aplicáveis a depósitos de dados e ao seu consumo seguro do ponto de vista de normas internacionais governamentais e de mercado com foco nas regulações PCI-DSS, ISO 27002 e HIPAA. Seu objetivo principal é consolidar esses dispositivos num grupo de controles comuns, oferecer uma visão histórica do fim de cada uma e finalmente mostrar meios de aplicação dos controles consolidados em um produto de mercado multi plataforma.

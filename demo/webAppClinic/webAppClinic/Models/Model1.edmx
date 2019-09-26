@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="clinicvaultModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Exams">
+          <Key>
+            <PropertyRef Name="ExamID" />
+          </Key>
+          <Property Name="ExamID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientID" Type="int" Nullable="false" />
+          <Property Name="ExamTypeID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="RawDocument" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="ImageID" />
+          </Key>
+          <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExamID" Type="int" Nullable="false" />
+          <Property Name="ImageRaw" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="PatientID" />
+          </Key>
+          <Property Name="PatientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SSN" Type="char" MaxLength="11" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StreetAddress" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ZipCode" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="State" Type="char" MaxLength="2" Nullable="false" />
+          <Property Name="BirthDate" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Records">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Token" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Pin1Token" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Pin2Token" Type="nvarchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Visits">
+          <Key>
+            <PropertyRef Name="VisitID" />
+          </Key>
+          <Property Name="VisitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Treatment" Type="nvarchar" MaxLength="4000" Nullable="false" />
+          <Property Name="FollowUpDate" Type="date" />
+        </EntityType>
+        <Association Name="FK_Exams_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="Exams" Type="Self.Exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Exams">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Images_Exams">
+          <End Role="Exams" Type="Self.Exams" Multiplicity="1" />
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exams">
+              <PropertyRef Name="ExamID" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="ExamID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visits_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="Visits" Type="Self.Visits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Visits">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clinicvaultModelStoreContainer">
+          <EntitySet Name="Exams" EntityType="Self.Exams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Records" EntityType="Self.Records" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visits" EntityType="Self.Visits" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Exams_Patients" Association="Self.FK_Exams_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Exams" EntitySet="Exams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Images_Exams" Association="Self.FK_Images_Exams">
+            <End Role="Exams" EntitySet="Exams" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visits_Patients" Association="Self.FK_Visits_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Visits" EntitySet="Visits" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="clinicvaultModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Exams">
+          <Key>
+            <PropertyRef Name="ExamID" />
+          </Key>
+          <Property Name="ExamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientID" Type="Int32" Nullable="false" />
+          <Property Name="ExamTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RawDocument" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_Exams_Patients" FromRole="Exams" ToRole="Patients" />
+          <NavigationProperty Name="Images" Relationship="Self.FK_Images_Exams" FromRole="Exams" ToRole="Images" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="ImageID" />
+          </Key>
+          <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExamID" Type="Int32" Nullable="false" />
+          <Property Name="ImageRaw" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Exams" Relationship="Self.FK_Images_Exams" FromRole="Images" ToRole="Exams" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="PatientID" />
+          </Key>
+          <Property Name="PatientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SSN" Type="String" MaxLength="11" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ZipCode" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Exams" Relationship="Self.FK_Exams_Patients" FromRole="Patients" ToRole="Exams" />
+          <NavigationProperty Name="Visits" Relationship="Self.FK_Visits_Patients" FromRole="Patients" ToRole="Visits" />
+        </EntityType>
+        <EntityType Name="Records">
+          <Key>
+            <PropertyRef Name="RecordID" />
+          </Key>
+          <Property Name="RecordID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Token" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pin1Token" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pin2Token" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Visits">
+          <Key>
+            <PropertyRef Name="VisitID" />
+          </Key>
+          <Property Name="VisitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Reason" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Treatment" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FollowUpDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Patients" Relationship="Self.FK_Visits_Patients" FromRole="Visits" ToRole="Patients" />
+        </EntityType>
+        <Association Name="FK_Exams_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="Exams" Type="Self.Exams" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Exams">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Images_Exams">
+          <End Role="Exams" Type="Self.Exams" Multiplicity="1" />
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exams">
+              <PropertyRef Name="ExamID" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="ExamID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Visits_Patients">
+          <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+          <End Role="Visits" Type="Self.Visits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="PatientID" />
+            </Principal>
+            <Dependent Role="Visits">
+              <PropertyRef Name="PatientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="clinicvaultEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Exams" EntityType="Self.Exams" />
+          <EntitySet Name="Images" EntityType="Self.Images" />
+          <EntitySet Name="Patients" EntityType="Self.Patients" />
+          <EntitySet Name="Records" EntityType="Self.Records" />
+          <EntitySet Name="Visits" EntityType="Self.Visits" />
+          <AssociationSet Name="FK_Exams_Patients" Association="Self.FK_Exams_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Exams" EntitySet="Exams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Images_Exams" Association="Self.FK_Images_Exams">
+            <End Role="Exams" EntitySet="Exams" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Visits_Patients" Association="Self.FK_Visits_Patients">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Visits" EntitySet="Visits" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="clinicvaultModelStoreContainer" CdmEntityContainer="clinicvaultEntities">
+          <EntitySetMapping Name="Exams">
+            <EntityTypeMapping TypeName="clinicvaultModel.Exams">
+              <MappingFragment StoreEntitySet="Exams">
+                <ScalarProperty Name="ExamID" ColumnName="ExamID" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="ExamTypeID" ColumnName="ExamTypeID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="RawDocument" ColumnName="RawDocument" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="clinicvaultModel.Images">
+              <MappingFragment StoreEntitySet="Images">
+                <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+                <ScalarProperty Name="ExamID" ColumnName="ExamID" />
+                <ScalarProperty Name="ImageRaw" ColumnName="ImageRaw" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="clinicvaultModel.Patients">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="StreetAddress" ColumnName="StreetAddress" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Records">
+            <EntityTypeMapping TypeName="clinicvaultModel.Records">
+              <MappingFragment StoreEntitySet="Records">
+                <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Pin1Token" ColumnName="Pin1Token" />
+                <ScalarProperty Name="Pin2Token" ColumnName="Pin2Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visits">
+            <EntityTypeMapping TypeName="clinicvaultModel.Visits">
+              <MappingFragment StoreEntitySet="Visits">
+                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="Treatment" ColumnName="Treatment" />
+                <ScalarProperty Name="FollowUpDate" ColumnName="FollowUpDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
